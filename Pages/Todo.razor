@@ -1,0 +1,42 @@
+@page "/todo"
+
+<h3>Список справ</h3>
+
+<input @bind="newTask" placeholder="Введіть задачу" />
+<button @onclick="AddTask">Додати</button>
+
+<ul>
+    @foreach (var task in tasks)
+    {
+        <li>
+            <input type="checkbox" @bind="task.IsDone" />
+            @task.Title
+            <button @onclick="() => RemoveTask(task)">❌</button>
+        </li>
+    }
+</ul>
+
+@code {
+    private string newTask;
+    private List<TodoItem> tasks = new();
+
+    void AddTask()
+    {
+        if (!string.IsNullOrWhiteSpace(newTask))
+        {
+            tasks.Add(new TodoItem { Title = newTask });
+            newTask = "";
+        }
+    }
+
+    void RemoveTask(TodoItem task)
+    {
+        tasks.Remove(task);
+    }
+
+    class TodoItem
+    {
+        public string Title { get; set; }
+        public bool IsDone { get; set; }
+    }
+}
